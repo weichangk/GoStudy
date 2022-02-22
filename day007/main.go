@@ -19,6 +19,8 @@ func main() {
 	arrayToSlice()
 
 	sliceIsClassType()
+
+	sliceCopy()
 }
 
 func sliceSyntax() {
@@ -155,4 +157,49 @@ func sliceIsClassType() {
 	fmt.Println(s1)
 	fmt.Println(s2)
 
+}
+
+func sliceCopy() {
+	fmt.Println("\n深拷贝和浅拷贝测试")
+	// 深拷贝
+	// 拷贝的是数据本身。值类型的数据，默认都是深拷贝：array, int, float, string, bool, struct
+
+	// 浅拷贝
+	// 拷贝的是数据的地址。导致多个变量指向同一块内存/引用类型的数据默认都是浅拷贝：slice, map
+
+	s1 := []int{1, 2, 3, 4}
+	s2 := make([]int, 0) //len=0 cap=0
+	for i := 0; i < len(s1); i++ {
+		s2 = append(s2, s1[i])
+	}
+	fmt.Println(s1) // [1 2 3 4]
+	fmt.Println(s2) // [1 2 3 4]
+
+	s1[0] = 100
+	fmt.Println(s1) // [100 2 3 4] // 深拷贝了，指的不是同一块内存
+	fmt.Println(s2) // [1 2 3 4]
+
+	s3 := append(s1, s2...) // 深拷贝
+	s1[1] = 111
+	s2[2] = 666
+	fmt.Println(s1) // [100 111 3 4]
+	fmt.Println(s2) // [1 2 666 4]
+	fmt.Println(s3) // [100 2 3 4 1 2 3 4] // 不受影响
+
+	fmt.Println("\ncopy() 函数测试")
+	// copy() 函数可以实现slice 的深拷贝 copy方法是不会建立两个切片的联系的
+
+	s4 := []int{7, 8, 9}
+	fmt.Println(s2) // [1 2 666 4]
+	fmt.Println(s4) // [7 8 9]
+
+	// copy(s2, s4)    // 从源 s4 拷贝到目标 s2
+	// fmt.Println(s2) // [7 8 9 4]
+	// fmt.Println(s4) // [7 8 9]
+	// copy(s4, s2)
+	// fmt.Println(s2) // [1 2 666 4]
+	// fmt.Println(s4) // [1 2 666]
+	copy(s4, s2[1:3])
+	fmt.Println(s2) // [1 2 666 4]
+	fmt.Println(s4) // [2 666 9]
 }
