@@ -18,6 +18,10 @@ func main() {
 
 	mapDelete()
 
+	mapLen()
+
+	mapIsType()
+
 }
 
 func mapDeclare() {
@@ -71,4 +75,29 @@ func mapDelete() {
 	delete(m1, "c#") // 删除不存在的 key 不会报错
 	fmt.Println(m1)  // map[go:1 java:3]
 
+}
+
+func mapLen() {
+	fmt.Println("\nmap 长度测试")
+	m1 := map[string]int{"go": 1, ".net": 2, "java": 3}
+	fmt.Printf("len: %v\n", len(m1)) // len: 3
+}
+
+func mapIsType() {
+	fmt.Println("\nmap 是引用类型测试")
+	m1 := map[int]string{
+		1: "html",
+		2: "css",
+		3: "jquery",
+	}
+	m1[100] = "go"
+	fmt.Println(m1) // map[1:html 2:css 3:jquery 100:go]
+	m11 := m1
+	m11[100] = "golang"
+	fmt.Println(m1)  // map[1:html 2:css 3:jquery 100:golang]
+	fmt.Println(m11) // map[1:html 2:css 3:jquery 100:golang]
+	// 与切片相似，映射是引用类型。当将映射分配给一个新变量时，它们都指向相同的内部数据结构。因此一个的变化会反映另一个。
+
+	// map不能使用==操作符进行比较。==只能用来检查map是否为空。否则会报错：invalid operation: map1 == map2 (map can only be comparedto nil)
+	// if(m1 == m11){}
 }
